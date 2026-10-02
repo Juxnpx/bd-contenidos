@@ -27,7 +27,11 @@ Escribe una consulta que utilice un filtro para calcular simultáneamente el nú
 
 Solución:
 ```sql
-
+SELECT 
+	ROUND(AVG(reproducciones) FILTER (WHERE reproducciones > 100000000), 2) AS media_exitos, 
+	ROUND(AVG(reproducciones) FILTER (WHERE reproducciones < 1000000), 2) AS media_minoritarias 
+	
+	FROM cancion;
 ```
 
 Resultado:
@@ -189,6 +193,25 @@ $FAMILIAR$(empleado, nombre, sexo, fechaNac, relación\*)
 
 Solución:
 ```sql
+CREATE TABLE FAMILIAR (
+    empleado VARCHAR(9),
+    nombre VARCHAR(50),
+    sexo CHAR(1),
+    fechaNac DATE,
+    relacion VARCHAR(20),
+    PRIMARY KEY (empleado, nombre)
+);
+INSERT INTO FAMILIAR (empleado, nombre, sexo, fechaNac, relacion) VALUES
+('333445555', 'Alicia', 'F', '1986-04-06', 'Hija'),
+('333445555', 'Teodoro', 'M', '1983-10-25', 'Hijo'),
+('333445555', 'Luisa', 'F', '1958-05-03', 'Esposa'),
+('987654321', 'Alfonso', 'M', '1942-02-28', 'Esposo'),
+('123456789', 'Miguel', 'M', '1988-01-04', 'Hijo'),
+('123456789', 'Alice', 'F', '1988-12-30', 'Hija'),
+('123456789', 'Elisa', 'F', '1967-05-05', 'Esposa');
+SELECT * 
+FROM FAMILIAR 
+WHERE sexo = 'M';
 
 ```
 

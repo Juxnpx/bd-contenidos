@@ -412,7 +412,7 @@ Escribe una consulta para seleccionar las distintas combinaciones de país (`pai
 
 Solución:
 ```sql
-
+SELECT DISTINCT pais, genero FROM cancion;
 ```
 
 | pais           | genero |
@@ -467,7 +467,7 @@ Escribe una consulta para seleccionar las reproducciones (`reproducciones`) de l
 
 Solución:
 ```sql
-
+SELECT reproducciones FROM cancion WHERE reproducciones < 1000000;
 ```
 
 | reproducciones |
@@ -490,7 +490,7 @@ Escribe otra consulta para seleccionar el género (`genero`) y el idioma (`idiom
 
 Solución:
 ```sql
-
+SELECT genero, idioma FROM cancion WHERE reproducciones < 1000000;
 ```
 
 | genero | idioma |
@@ -560,7 +560,7 @@ Utiliza el operador not para seleccionar las canciones (solo las columnas `titul
 
 Solución:
 ```sql
-
+SELECT titulo, genero, pais FROM cancion WHERE NOT genero = 'Rap';
 ```
 
 | titulo                     | genero | pais           |
@@ -601,7 +601,7 @@ El operador `OR` de SQL es un operador ‘o inclusivo’: se ejecuta correctamen
 
 Solución:
 ```sql
-
+SELECT titulo, idioma, pais FROM cancion WHERE (idioma = 'ES' OR pais = 'España') AND NOT (idioma = 'ES' AND pais = 'España');
 ```
 
 | titulo           | idioma | pais           |
@@ -709,7 +709,7 @@ Escribe una consulta que calcule y devuelva una columna llamada `porcentaje_me_g
 
 Solución:
 ```sql
-
+SELECT ROUND(me_gusta * 100.0 / reproducciones, 1) AS porcentaje_me_gusta FROM cancion LIMIT 10;
 ```
 
 | porcentaje_me_gusta |
@@ -776,7 +776,7 @@ Escribe una consulta que calcule y devuelva una columna llamada `que_donde` que 
 
 Solución:
 ```sql
-
+SELECT DISTINCT genero || ' ' || pais AS que_donde FROM cancion;
 ```
 
 | que_donde           |

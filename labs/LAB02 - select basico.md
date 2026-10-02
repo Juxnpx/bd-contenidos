@@ -21,7 +21,12 @@ Escribe una consulta que calcule y devuelva una columna llamada `que_donde` que 
 
 Solución:
 ```sql
-
+SELECT 
+UPPER(genero) || ' ' || LOWER(pais) AS que_donde, 
+ROUND(me_gusta * 100.0 / reproducciones, 1) AS porcentaje_me_gusta 
+FROM cancion 
+WHERE idioma != 'ES' 
+ORDER BY porcentaje_me_gusta DESC LIMIT 10;
 
 ```
 
@@ -167,7 +172,20 @@ Para emitir una canción en la radio hay que añadirle una cuña publicitaria. E
 
 Solución:
 ```sql
-
+SELECT DISTINCT 
+titulo,
+pais, 
+duracion,
+ROUND( 
+	CASE 
+		WHEN pais = 'Reino Unido' THEN  (duracion + 30) / 60.0 
+		WHEN pais = 'España' THEN (duracion + 45) / 60.0 
+			  
+	 END, 2 ) AS duracion_radio_min 
+	  
+FROM cancion 
+ORDER BY duracion DESC
+ LIMIT 20;
 
 ```
 
@@ -371,7 +389,7 @@ Escribe una consulta para encontrar las canciones (`cancion`) cuya duración (`d
 
 Solución:
 ```sql
-
+SELECT * FROM cancion WHERE duracion IS NOT NULL AND idioma IS NULL;
 
 ```
 
@@ -471,7 +489,11 @@ Escribe una consulta que devuelva todas las columnas de las canciones y añada u
 
 Solución:
 ```sql
-
+SELECT 
+*, 
+COALESCE(duracion, reproducciones, me_gusta, valoracion, -1) AS primer_dato 
+FROM cancion 
+ORDER BY id_cancion DESC LIMIT 10;
 
 ```
 
@@ -582,6 +604,11 @@ Escribe una consulta que cuente las canciones que **no** están en inglés, cont
 Solución:
 
 ```sql
+SELECT 
+COUNT(*) AS no_ingles 
+
+FROM cancion 
+WHERE idioma <> 'EN' OR idioma IS NULL;
 ```
 
 Resultado:
@@ -653,7 +680,9 @@ Salida:
 
 Solución:
 ```sql
-
+SELECT AVG(reproducciones) 
+FROM cancion 
+WHERE reproducciones > 1000000;
 
 ```
 
@@ -693,7 +722,9 @@ Salida:
 
 Solución:
 ```sql
-
+SELECT 
+COUNT(DISTINCT anio) AS anios_distintos
+ FROM cancion;
 
 ```
 
@@ -763,7 +794,11 @@ Escribe una consulta que muestre cada año de publicación (`anio`) distinto en 
 
 Solución:
 ```sql
-
+SELECT 
+anio, 
+COUNT(*) AS canciones_mismo_anio 
+FROM cancion 
+GROUP BY anio;
 
 ```
 
@@ -880,7 +915,9 @@ Escribe una consulta que cuente el número de canciones de cada una de las sigui
 
 Solución:
 ```sql
-
+SELECT 
+	COUNT(*) FILTER (WHERE duracion < 200) AS corta, COUNT(*) FILTER (WHERE duracion BETWEEN 200 AND 300) AS media, 
+COUNT(*) FILTER (WHERE duracion > 300) AS larga FROM cancion;
 
 ```
 
