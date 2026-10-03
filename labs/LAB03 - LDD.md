@@ -270,6 +270,21 @@ Reescribe la definición de la tabla de `FAMILIAR` para agregar las siguientes r
 
 Solución
 ```sql
+drop table if exists FAMILIAR;
+CREATE TABLE FAMILIAR (
+    empleado text not null,
+    nombre text not null,
+    sexo text not null CHECK (sexo IN ('M', 'F', 'O')),
+    fechaNac text not null,
+    relacion text CHECK (relacion IN ('Hijo', 'Hija', 'Conyuge', 'Hermano', 'Hermana'))
+  
+)STRICT;
+  
+
+SELECT 
+	Lower(tbl_name) as name, 
+	Lower(REPLACE(REPLACE(REPLACE(REPLACE(sql, ' ', ''), CHAR(9), ''), CHAR(10), ''), CHAR(13), '')) as sql
+from sqlite_schema where type='table' and Lower(name)='familiar';
 
 ```
 
@@ -456,7 +471,27 @@ En caso de ser una sola columna, crea una restricción a nivel de columna.
 
 Solución:
 ```sql
+-- Run this query to get the database schema
+drop table if exists EMPLEADO;
+CREATE TABLE EMPLEADO (
+    nombre text not null,
+    apellido1 text not null,
+    apellido2 text ,
+    dni text primary key not null,
+    fechaNac text not null,
+  	direccion text,
+  	sexo text not null,
+  	sueldo real not null,
+  	supervisor text ,
+  	dpto integer not null
+  
+)STRICT;
+  
 
+SELECT 
+    Lower(tbl_name) as name, 
+    Lower(REPLACE(REPLACE(REPLACE(REPLACE(sql, ' ', ''), CHAR(9), ''), CHAR(10), ''), CHAR(13), '')) as sql
+from sqlite_schema where type='table' and Lower(name)='empleado'; 
 ```
 
 Para verificar tu respuesta, selecciona su definición de la tabla sqlite_schema mediante la siguiente consulta:
@@ -727,7 +762,23 @@ Reescribe la definición de la tabla de `FAMILIAR` para agregar su clave primari
 
 Solución
 ```sql
+-- Run this query to get the database schema
+drop table if exists FAMILIAR;
+CREATE TABLE FAMILIAR (
+    empleado text not null,
+    nombre text not null,
+    sexo text not null check(sexo in('m','f','o')),
+    fechaNac text not null,
+    relacion text check(relacion in('hijo','hija','conyuge','hermano','hermana')),
+  	Primary key (empleado, nombre),
+  	Foreign key (empleado) references empleado (dni) on update cascade on delete cascade
+)STRICT;
+  
 
+SELECT 
+    Lower(tbl_name) as name, 
+    Lower(REPLACE(REPLACE(REPLACE(REPLACE(sql, ' ', ''), CHAR(9), ''), CHAR(10), ''), CHAR(13), '')) as sql
+from sqlite_schema where type='table' and Lower(name)='familiar';
 ```
 
 Para verificar tu respuesta, selecciona su definición de la tabla sqlite_schema mediante la siguiente consulta:
@@ -741,9 +792,9 @@ from sqlite_schema where type='table' and Lower(name)='familiar';
 
 Tabla resultado:
 
-| name     | sql                                                                                                                                                                                                                                                                                                             | 
-| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| familiar | createtablefamiliar(empleadotextnotnull,nombretextnotnull,sexotextnotnullcheck(sexoin('m','f','o')),fechanactextnotnull,relaciontextcheck(relacionin('hijo','hija','conyuge','hermano','hermana')),primarykey(empleado,nombre),foreignkey(empleado)referencesempleado(dni)onupdatecascadeondeletecascade)strict |
+| name     | sql                                                                                                                                                                                                                                                                                                             |     |
+| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- |
+| familiar | createtablefamiliar(empleadotextnotnull,nombretextnotnull,sexotextnotnullcheck(sexoin('m','f','o')),fechanactextnotnull,relaciontextcheck(relacionin('hijo','hija','conyuge','hermano','hermana')),primarykey(empleado,nombre),foreignkey(empleado)referencesempleado(dni)onupdatecascadeondeletecascade)strict |     |
 
 ---
 ## Tipos de asociaciones entre tablas
@@ -831,9 +882,9 @@ select name, sql from sqlite_schema where type='table' and name like 'local%';
 
 Tabla resultado:
 
-| name                | sql                                                                                                                                                                                                                                        |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| LOCALIZACIONES_DPTO | CREATE TABLE LOCALIZACIONES_DPTO ( dpto INTEGER NOT NULL, ubicacion TEXT NOT NULL, valoracion integer not null default 0 check (valoracion > -1 and valoracion <6), PRIMARY KEY (dpto, ubicacion) -- PRIMARY KEY implica NOT NULL ) STRICT |
+| name                | sql                                                                                                                                                                                                                                        |     |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --- |
+| LOCALIZACIONES_DPTO | CREATE TABLE LOCALIZACIONES_DPTO ( dpto INTEGER NOT NULL, ubicacion TEXT NOT NULL, valoracion integer not null default 0 check (valoracion > -1 and valoracion <6), PRIMARY KEY (dpto, ubicacion) -- PRIMARY KEY implica NOT NULL ) STRICT |     |
 
 En SQLite, `ALTER TABLE` permite modificar las columnas de una tabla:
 - `ADD column` añade una nueva columna al final.
@@ -881,7 +932,30 @@ Elimina la columna `valoracion` de la tabla `UBICACION`  (anteriormente, `LOCALI
 
 Solución:
 ```sql
+DROP TABLE IF EXISTS UBICACION;
+DROP TABLE IF EXISTS LOCALIZACIONES_DPTO;
 
+CREATE TABLE LOCALIZACIONES_DPTO (
+    dpto INTEGER NOT NULL,
+    ubicacion TEXT NOT NULL,
+    PRIMARY KEY (dpto, ubicacion) --primarykey implica not null
+) STRICT;
+
+-- Añadir la columna valoracion
+ALTER TABLE LOCALIZACIONES_DPTO
+ADD valoracion INTEGER NOT NULL DEFAULT 0 CHECK (valoracion > -1 AND valoracion < 6);
+
+-- Renombrar la tabla
+ALTER TABLE LOCALIZACIONES_DPTO RENAME TO UBICACION;
+
+-- Eliminar la columna valoracion
+ALTER TABLE UBICACION DROP COLUMN valoracion;
+
+-- Consulta de comprobación del esquema resultante
+SELECT 
+    Lower(tbl_name) as name, 
+    Lower(REPLACE(REPLACE(REPLACE(REPLACE(sql, ' ', ''), CHAR(9), ''), CHAR(10), ''), CHAR(13), '')) as sql
+FROM sqlite_schema WHERE type='table' AND Lower(name)='ubicacion';
 ```
 
 Para verificar tu respuesta, selecciona su definición de la tabla sqlite_schema mediante la siguiente consulta:
