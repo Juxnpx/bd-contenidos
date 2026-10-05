@@ -45,6 +45,7 @@ El álgebra relacional es otro ejemplo de álgebra. Sus operandos atómicos son:
 	- El resultado de una expresión de álgebra relacional también es una relación que representa el resultado de una consulta a la base de datos (o solicitud de recuperación).
 
 ### 1.2. Operaciones
+==SE LEE LA OPERACION DE DENTRO A AFUERA==
 
 El álgebra relacional consta de varios grupos de operaciones
 - Operaciones relacionales **unarias**
