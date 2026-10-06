@@ -393,7 +393,7 @@ $$(R \cap S) \cap T = R \cap (S \cap T)$$
 
 3. La operación **diferencia no es conmutativa**; es decir, en general
 $$R-S \not= S-R$$
-
+==DOS RELACIONES SON COMPATIBLES SI TIENEN EL MISMO GRADO Y DOMINIO COMPATIBLES ATRIBUTO A ATRIBUTO==
 #### Representación en SQL
 
 ```sql

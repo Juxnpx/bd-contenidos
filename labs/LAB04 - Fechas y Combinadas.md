@@ -23,8 +23,16 @@ Escribe una consulta que devuelva el sueldo medio por departamento para departam
 
 Solución:
 ```sql
-
+SELECT 
+    dpto, 
+    AVG(sueldo) AS sueldo_medio
+FROM EMPLEADO
+GROUP BY dpto
+HAVING COUNT(*) > 1;
 ```
+
+
+==Todas las condiciones de agrupamiento hay que ponerlas con group by==
 
 Resultado:
 
@@ -242,7 +250,12 @@ Escribe una consulta para obtener el nombre, apellido1 y fechaNac de los emplead
 
 Solución:
 ```sql
-
+SELECT nombre, apellido1, fechaNac
+FROM EMPLEADO
+WHERE (
+    (strftime('%Y', '2025-01-01') - strftime('%Y', fechaNac)) - 
+    (strftime('%m-%d', '2025-01-01') < strftime('%m-%d', fechaNac))
+) BETWEEN 59 AND 70;
 ```
 
 Tabla resultado:
