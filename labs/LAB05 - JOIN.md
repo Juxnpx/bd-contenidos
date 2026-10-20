@@ -273,7 +273,15 @@ Escribe una consulta que devuelva el nombre (nombre_empleado) y apellido1 de emp
 Solución:
 
 ```sql
-
+SELECT 
+ E.Nombre as nombre_empleado, 
+ E.Apellido1,
+ P.Nombre as nombre_proyecto, 
+ P.Ubicacion 
+FROM Proyecto P 
+ INNER JOIN  TRABAJA_EN T ON (P.numero=T.proyecto) 
+ INNER JOIN Empleado E ON (E.dni=T.empleado)
+order by nombre_empleado asc;
 ```
 
 Tabla resultado:
@@ -333,7 +341,17 @@ Tabla resultado:
 Escribe una consulta que devuelva los empleados que ganan entre 2000 y 10000 euros menos que su supervisor directo. Las columnas resultado deben ser: nombre_empleado, sueldo_empleado, nombre_supervisor y sueldo_supervisor.
 
 ```sql
-
+SELECT 
+    e.nombre AS nombre_empleado,
+    e.sueldo AS sueldo_empleado,
+    s.nombre AS nombre_supervisor,
+    s.sueldo AS sueldo_supervisor
+FROM 
+    EMPLEADO e
+JOIN 
+    EMPLEADO s ON e.supervisor = s.dni
+WHERE 
+    (s.sueldo - e.sueldo) BETWEEN 2000 AND 10000;
 ```
 
 Tabla resultado:
@@ -500,6 +518,19 @@ INSERT INTO Proyecto VALUES ('ProductoGTP',6,'Madrid',5);
 Solución:
 ```sql
 
+SELECT 
+    P.nombre AS nombre_proyecto,
+    E.nombre AS nombre_empleado,
+    T.horas
+FROM 
+    proyecto P
+LEFT JOIN 
+    trabaja_en T ON P.numero = T.proyecto
+LEFT JOIN 
+    empleado E ON T.empleado = E.dni
+ORDER BY 
+    nombre_proyecto ASC,
+    nombre_empleado ASC;
 ```
 
 Tabla resultado:
@@ -630,7 +661,16 @@ Obtener un listado con el nombre completo de los empleados que **NO** tienen nin
 
 Solución:
 ```sql
-
+SELECT 
+    e.nombre,
+    e.apellido1,
+    e.apellido2 
+FROM 
+    EMPLEADO e
+LEFT OUTER JOIN 
+    FAMILIAR f ON e.dni = f.empleado
+WHERE 
+    f.empleado IS NULL;
 ```
 
 Tabla resultado:
@@ -800,7 +840,21 @@ Escribe una consulta que devuelva para cada departamento su nombre (nombre_depar
 Solución:
 
 ```sql
-
+SELECT 
+    d.nombre AS nombre_departamento,
+    COUNT(DISTINCT p.numero) AS num_proyectos,
+    COALESCE(SUM(t.horas), 0) AS total_horas_dedicadas
+FROM 
+    DEPARTAMENTO d
+LEFT JOIN 
+    PROYECTO p ON d.numero = p.dpto
+LEFT JOIN 
+    TRABAJA_EN t ON p.numero = t.proyecto
+GROUP BY 
+    d.numero, 
+    d.nombre
+ORDER BY 
+    total_horas_dedicadas DESC;
 ```
 
 Tabla resultado:

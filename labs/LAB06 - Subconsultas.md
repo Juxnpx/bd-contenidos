@@ -32,7 +32,23 @@ La dirección de la empresa necesita un informe completo sobre la situación de 
 
 Solución:
 ```sql
-
+SELECT 
+    d.nombre AS nombre_departamento,
+    e_dir.nombre || ' ' || e_dir.apellido1 AS nombre_director,
+    COUNT(DISTINCT e.dni) AS num_empleados,
+    COUNT(DISTINCT p.numero) AS num_proyectos
+FROM 
+    DEPARTAMENTO d
+LEFT JOIN 
+    EMPLEADO e_dir ON d.director = e_dir.dni
+LEFT JOIN 
+    EMPLEADO e ON d.numero = e.dpto AND e.dni <> d.director
+LEFT JOIN 
+    PROYECTO p ON d.numero = p.dpto
+GROUP BY 
+    d.numero, d.nombre, e_dir.nombre, e_dir.apellido1
+ORDER BY 
+    num_empleados DESC;
 ```
 
 Tabla resultado:
@@ -176,7 +192,13 @@ Escribe una consulta que muestre los nombres de los departamentos cuyo sueldo me
 
 Solución:
 ```sql
-
+SELECT
+ D.nombre,
+ AVG(E.sueldo) AS sueldoMedio
+FROM EMPLEADO E INNER JOIN DEPARTAMENTO D ON (E.dpto = D.numero)
+GROUP BY D.numero, D.nombre
+HAVING AVG(E.sueldo) > ( SELECT AVG(Sueldo)
+						 FROM EMPLEADO);
 ```
 
 Tabla resultado:
@@ -291,7 +313,20 @@ Escribe una consulta que liste el nombre y apellido de los empleados que trabaja
 
 Solución:
 ```sql
-
+SELECT DISTINCT 
+    e.nombre, 
+    e.apellido1
+FROM 
+    EMPLEADO e
+JOIN 
+    TRABAJA_EN t ON e.dni = t.empleado
+JOIN 
+    PROYECTO p ON t.proyecto = p.numero
+WHERE 
+    p.ubicacion = 'Madrid'
+ORDER BY 
+    e.apellido1 ASC, 
+    e.nombre ASC;
 ```
 
 Tabla resultado:
