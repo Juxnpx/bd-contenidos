@@ -327,16 +327,24 @@ WHERE
 ORDER BY 
     e.apellido1 ASC, 
     e.nombre ASC;
+    
+    --------------------------------------------------------
+    SELECT nombre, apellido1 
+    FROM EMPLEADO WHERE dni IN ( SELECT empleado FROM TRABAJA_EN 
+								    WHERE proyecto IN ( SELECT numero 
+									FROM PROYECTO WHERE ubicacion = 'Madrid'
+									) ) 
+	ORDER BY apellido1 ASC, nombre ASC;
 ```
 
 Tabla resultado:
 
-| nombre   | apellido1 | 
-| -------- | --------- |
-| Alberto  | Campos    |
-| Eduardo  | Ochoa     |
-| Fernando | Ojeda     |
-| Juana    | Sáinz     |
+| nombre   | apellido1 |     |
+| -------- | --------- | --- |
+| Alberto  | Campos    |     |
+| Eduardo  | Ochoa     |     |
+| Fernando | Ojeda     |     |
+| Juana    | Sáinz     |     |
 
 ---
 # Subconsultas Correlacionadas
@@ -466,21 +474,28 @@ Escribe una consulta que liste el el nombre y apellido de cada empleado junto co
 
 Solución:
 ```sql
-
+SELECT  
+    e.nombre, 
+    e.apellido1,
+	e.sueldo - (select avg(e2.sueldo) from empleado e2 where e.dpto = e2.dpto) as 
+	diferenciaSueldoMedio
+FROM 
+    EMPLEADO e
+	order by diferenciaSueldoMedio desc;
 ```
 
 Tabla resultado:
 
-| nombre   | apellido1 | diferenciaSueldoMedio | 
-| -------- | --------- | --------------------- |
-| Juana    | Sáinz     | 12000                 |
-| Alberto  | Campos    | 6750                  |
-| Fernando | Ojeda     | 4750                  |
-| Eduardo  | Ochoa     | 0                     |
-| José     | Pérez     | -3250                 |
-| Alicia   | Jiménez   | -6000                 |
-| Luis     | Pajares   | -6000                 |
-| Aurora   | Oliva     | -8250                 |
+| nombre   | apellido1 | diferenciaSueldoMedio |     |
+| -------- | --------- | --------------------- | --- |
+| Juana    | Sáinz     | 12000                 |     |
+| Alberto  | Campos    | 6750                  |     |
+| Fernando | Ojeda     | 4750                  |     |
+| Eduardo  | Ochoa     | 0                     |     |
+| José     | Pérez     | -3250                 |     |
+| Alicia   | Jiménez   | -6000                 |     |
+| Luis     | Pajares   | -6000                 |     |
+| Aurora   | Oliva     | -8250                 |     |
 
 ---
 ## Devuelve un conjunto de valores: `WHERE`
@@ -553,7 +568,21 @@ Escribe una consulta que liste el nombre de los proyectos donde trabaja al menos
 
 Solución:
 ```sql
-
+SELECT 
+    p.nombre
+FROM 
+    PROYECTO p
+WHERE 
+    EXISTS (
+        SELECT *
+        FROM TRABAJA_EN t
+        JOIN EMPLEADO e ON t.empleado = e.dni
+        JOIN DEPARTAMENTO d ON e.dpto = d.numero
+        WHERE t.proyecto = p.numero
+          AND d.nombre = 'Investigación'
+    )
+ORDER BY 
+    p.nombre ASC;
 ```
 
 Tabla resultado:
@@ -642,7 +671,24 @@ SELECT nombre, apellido1, sueldo FROM EMPLEADO;
 
 Solución:
 ```sql
+UPDATE EMPLEADO
+SET sueldo = sueldo * 1.20
+WHERE dni IN (
+    SELECT empleado
+    FROM TRABAJA_EN
+    GROUP BY empleado
+    HAVING SUM(horas) > (
+        SELECT AVG(total_horas)
+        FROM (
+            SELECT SUM(horas) AS total_horas
+            FROM TRABAJA_EN
+            GROUP BY empleado
+        )
+    )
+);
 
+
+SELECT nombre, apellido1, sueldo FROM EMPLEADO;
 ```
 
 Tabla resultado:
@@ -769,11 +815,17 @@ Tabla resultado (idéntica en ambos casos):
 
 ## Ejercicio 07 
 
-Escribe una consulta que devuelva el `dni` de los empleados que no tienen ningún familiar registrado, ordenado por `dni`. Resuélvela con una de las siguiente opciones: (a) con `NOT IN` y (b) con `NOT EXISTS`. ¿Ha hecho falta sanear los NULL en la versión (a)? ¿Por qué?
+Escribe una consulta que devuelva el `dni` de los empleados que no tienen ningún familiar registrado, ordenado por `dni`. Resuélvela con una de las siguiente opciones: (a) con `NOT IN` y (b) con `NOT EXISTS`. ¿Ha hecho falta sanear los NULL en la versión (a)? ¿Por qué? 
+
+NO, porque el campo empleado en la tabla familiar es clave primaria y clave foranea hacia empleado. Al formar parte de la clve primaria, la columna no permite valores nulos, entonces la subconsulta nunc puede devolver nulos 
 
 Solución:
 ```sql
+SELECT dni 
+FROM EMPLEADO 
 
+WHERE dni NOT IN ( SELECT empleado FROM FAMILIAR )
+ORDER BY dni ASC;
 ```
 
 Tabla resultado:
@@ -831,7 +883,24 @@ WHERE P.ubicacion = 'Madrid';
 
 Solución:
 ```sql
-
+SELECT 
+    nombre, 
+    apellido1
+FROM 
+    EMPLEADO
+WHERE 
+    dni IN (
+        SELECT empleado
+        FROM TRABAJA_EN
+        WHERE proyecto IN (
+            SELECT numero
+            FROM PROYECTO
+            WHERE ubicacion = 'Madrid'
+        )
+    )
+ORDER BY 
+    apellido1 ASC, 
+    nombre ASC;
 ```
 
 Tabla resultado:
