@@ -102,15 +102,18 @@ Las **relaciones** son las asociaciones con significado entre entidades: un `Emp
 
 ### 3.1 Restricciones estructurales: las reglas del juego
 
+==🟡En entidad relación no existe la clave externa==
 Toda relación lleva **dos reglas** en cada extremo, que responden a dos preguntas:
 
-**A) Cardinalidad máxima** — *¿con cuántas te puedes relacionar como máximo?*
+**A) Cardinalidad máxima** — *¿con cuántas te puedes relacionar como máximo?* es la que se pinta en los extremos
 
 | Tipo | Significado | Ejemplo |
 |---|---|---|
 | **1:1** | Máximo una en cada lado | `dirige`: un empleado dirige un departamento y un departamento tiene un director |
 | **1:N** | Una del lado "1" se relaciona con muchas del lado "N"; una del lado "N", con una sola del lado "1" | `trabaja_para`: un departamento tiene muchos empleados; un empleado, un solo departamento |
 | **M:N** | Muchas por ambos lados | `trabaja_en`: un empleado en varios proyectos y un proyecto con varios empleados |
+
+
 
 **B) Cardinalidad mínima (participación)** — *¿es obligatorio participar?*
 
@@ -131,7 +134,7 @@ En BigER ambas se escriben juntas: `Entidad_1[MIN..MAX] -> Entidad_2[MIN..MAX]`,
 
 ![\|180](../../imgs/BD%20-%20BigER%20Relación%2011%201N.png)  
 
-### 3.2 Relaciones recursivas 🎭
+### ==🟢3.2 Relaciones recursivas ==🎭
 
 Una entidad puede relacionarse **consigo misma** (`Empleado` `supervisa` `Empleado`). Para que tenga sentido, cada participación lleva un **rol**: un empleado actúa como supervisor y otro como supervisado. Como los actores de un teatro: mismo grupo, papeles distintos. En BigER el rol se escribe tras la cardinalidad:
 

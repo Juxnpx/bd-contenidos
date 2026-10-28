@@ -671,6 +671,7 @@ No podemos modelarlo como se ve a continuación
 
 En el mundo real, las relaciones no son estáticas; muchas cambian con el tiempo. Un empleado cambia de departamento, un médico deja de estar adscrito a un hospital, un proveedor suministra la misma pieza a un proyecto en diferentes fechas. Hasta ahora sabemos cómo hacer la "foto" actual, pero ¿cómo guardamos el **álbum de fotos completo**?
 
+
 Por ejemplo, un `Profesor` imparte una `Asignatura`. Esta es una relación M:N. Ahora queremos registrar en qué **año académico (`curso`)** se impartió cada docencia. El problema es que un profesor puede impartir la asignatura de "BD" en múltiples cursos (20/21, 22/23, 23/24). Es decir, el mismo par (Profesor, Asignatura) se puede repetir por lo que el atributo curso de la relación `imparte` realmente sería multivaluado.
 
 >[!warning] ⚠️ Modelado erróneo:
