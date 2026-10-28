@@ -26,7 +26,7 @@ Escribe una consulta que muestre el nombre, apellido1 y sueldo de los empleados 
 
 Solución:
 ```sql
-
+select
 ```
 
 **Tabla resultado:**
