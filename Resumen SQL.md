@@ -126,3 +126,23 @@ CREATE TABLE EMPLEADO (
 
 ```
 
+## Restricciones del modelo relacional
+
+**Tipos de restricciones**:
+
+>[!info] Superclave y clave 
+> - Cualquier clave es una superclave (pero no al revés)
+> - Cualquier conjunto de atributos que incluya una clave es una superclave.
+> - Una superclave mínima también es una clave.
+
+- Restricciones inherentes o **implícitas**: el modelo relacional no permite una lista como valor para ningún atributo y tampoco permite tener tuplas duplicadas.
+- Restricciones **explícitas** o **basadas en esquema**:
+	1. Restricciones de **dominio**: cada valor de la dupla debe ser atómico (un único valor en la tupla) y del dominio de su atributo
+	2. Restricciones de **clave**:
+		* Por superclave SK de R: la superclave es cualquier combinación de datos que garantiza que jamás habrá dos filas  idénticas en la base de datos. Da igual si lleva datos de más (redundantes) lo importante es que no se repite
+		* Clave K de R: K es una superclave mínima (número de atributos), la eliminación de cualquier atributo de $K$ da como resultado un conjunto de atributos que deja de ser superclave.
+		* Clave candidata: cuando una relación tiene varias claves candidatas, se elige una como clave primaria y las demás serán claves alternativas.
+		* Atributo primo: es un atributo que forma parte de al menos una clave candidata
+	3. Restricciones de **integridad de entidad**: los atributos de clave primarioa de cada esquema de relación no pueden tener valores nulos
+	4. Restricciones de **integridad referencial**:  restricción entre dos relaciones (la referenciante y la referenciada), la referenciada tiene la PK, la referenciante es la tabla que necesita conectarse con la referenciada, guarda la clave externa FK esta puede ser clave primaria de la tabla o nulo, si es nulo no podría ser clave primaria.
+- Restricciones semánticas o basadas en aplicaciones: Basadas en la semántica de aplicación, el modelo no tiene suficiente expresividad para representarlas.  Ejemplo: “el máximo número de horas por empleado para todos los proyectos en los que trabaja es de 56 horas por semana"
