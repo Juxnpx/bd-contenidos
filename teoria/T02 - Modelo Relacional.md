@@ -329,27 +329,27 @@ Antes de poder definir nuestra base de datos relacional, necesitamos conocer qu�
 
 | Categoría                 | Tipo de Dato                          | Descripción                            | Soporte SQLite                     |
 | ------------------------- | ------------------------------------- | -------------------------------------- | ---------------------------------- |
-| **Numéricos Enteros**     | `SMALLINT`                            | Entero pequeño (típicamente 2 bytes)   | ✅ Sí (como INTEGER)               |
-|                           | `INTEGER` / `INT`                     | Entero estándar (típicamente 4 bytes)  | ✅ Sí (tipo nativo)                |
-|                           | `BIGINT`                              | Entero grande (típicamente 8 bytes)    | ✅ Sí (como INTEGER)               |
+| **Numéricos Enteros**     | `SMALLINT`                            | Entero pequeño (típicamente 2 bytes)   | ✅ Sí (como INTEGER)                |
+|                           | `INTEGER` / `INT`                     | Entero estándar (típicamente 4 bytes)  | ✅ Sí (tipo nativo)                 |
+|                           | `BIGINT`                              | Entero grande (típicamente 8 bytes)    | ✅ Sí (como INTEGER)                |
 | **Numéricos Decimales**   | `DECIMAL(p,s)` / `NUMERIC(p,s)`       | Numérico exacto con precisión y escala | ⚠️ Parcial (almacenado como REAL)  |
-|                           | `REAL`                                | Punto flotante de precisión simple     | ✅ Sí (tipo nativo)                |
-|                           | `DOUBLE PRECISION` / `FLOAT`          | Punto flotante de doble precisión      | ✅ Sí (como REAL)                  |
-| **Cadenas de Caracteres** | `CHARACTER(n)` / `CHAR(n)`            | Cadena de longitud fija                | ✅ Sí (como TEXT)                  |
-|                           | `CHARACTER VARYING(n)` / `VARCHAR(n)` | Cadena de longitud variable            | ✅ Sí (como TEXT)                  |
-|                           | `TEXT`                                | Cadena de longitud variable            | ✅ Sí (tipo nativo)                |
-| **Fecha y Hora**          | `DATE`                                | Fecha (año, mes, día)                  | ❌ No (usar TEXT o INTEGER)        |
-|                           | `TIME`                                | Hora del día                           | ❌ No (usar TEXT o INTEGER)        |
-|                           | `TIMESTAMP`                           | Fecha y hora combinadas                | ❌ No (usar TEXT o INTEGER)        |
-|                           | `INTERVAL`                            | Intervalo de tiempo                    | ❌ No                              |
-| **Booleano**              | `BOOLEAN`                             | Valores verdadero/falso                | ❌ No (usar INTEGER 0/1)           |
-| **Datos Binarios**        | `BINARY(n)`                           | Datos binarios de longitud fija        | ✅ Sí (como BLOB)                  |
-|                           | `VARBINARY(n)`                        | Datos binarios de longitud variable    | ✅ Sí (como BLOB)                  |
-|                           | `BLOB`                                | Objeto Binario Grande                  | ✅ Sí (tipo nativo)                |
-| **Adicionales**           | `CLOB`                                | Objeto de Caracteres Grande            | ✅ Sí (como TEXT)                  |
-|                           | `XML`                                 | Datos XML                              | ❌ No (usar TEXT)                  |
+|                           | `REAL`                                | Punto flotante de precisión simple     | ✅ Sí (tipo nativo)                 |
+|                           | `DOUBLE PRECISION` / `FLOAT`          | Punto flotante de doble precisión      | ✅ Sí (como REAL)                   |
+| **Cadenas de Caracteres** | `CHARACTER(n)` / `CHAR(n)`            | Cadena de longitud fija                | ✅ Sí (como TEXT)                   |
+|                           | `CHARACTER VARYING(n)` / `VARCHAR(n)` | Cadena de longitud variable            | ✅ Sí (como TEXT)                   |
+|                           | `TEXT`                                | Cadena de longitud variable            | ✅ Sí (tipo nativo)                 |
+| **Fecha y Hora**          | `DATE`                                | Fecha (año, mes, día)                  | ❌ No (usar TEXT o INTEGER)         |
+|                           | `TIME`                                | Hora del día                           | ❌ No (usar TEXT o INTEGER)         |
+|                           | `TIMESTAMP`                           | Fecha y hora combinadas                | ❌ No (usar TEXT o INTEGER)         |
+|                           | `INTERVAL`                            | Intervalo de tiempo                    | ❌ No                               |
+| **Booleano**              | `BOOLEAN`                             | Valores verdadero/falso                | ❌ No (usar INTEGER 0/1)            |
+| **Datos Binarios**        | `BINARY(n)`                           | Datos binarios de longitud fija        | ✅ Sí (como BLOB)                   |
+|                           | `VARBINARY(n)`                        | Datos binarios de longitud variable    | ✅ Sí (como BLOB)                   |
+|                           | `BLOB`                                | Objeto Binario Grande                  | ✅ Sí (tipo nativo)                 |
+| **Adicionales**           | `CLOB`                                | Objeto de Caracteres Grande            | ✅ Sí (como TEXT)                   |
+|                           | `XML`                                 | Datos XML                              | ❌ No (usar TEXT)                   |
 |                           | `JSON`                                | Datos JSON                             | ⚠️ Parcial (usar TEXT, JSON1 ext.) |
-|                           | `ARRAY`                               | Tipo array                             | ❌ No                              |
+|                           | `ARRAY`                               | Tipo array                             | ❌ No                               |
 
 **Leyenda:**
 
@@ -400,6 +400,7 @@ CREATE TABLE LOCALIZACIONES_DPTO (
 
 >[!exercise] Ejercicio
 > Revisa las relaciones definidas para la base de datos empresa y **crea las sentencias de creación de las tablas correspondientes en SQL** para su definición.
+
 
 ### Estado de bases de datos relacionales
 
