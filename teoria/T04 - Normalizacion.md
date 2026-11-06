@@ -340,10 +340,11 @@ ello, se eliminan los atributos que dependen transitivamente y se ponen en una n
 ### 2.3. Resumen de formas normales definidas informalmente
 
 | Forma normal | Definición informal                                         |
-|:------------:| ----------------------------------------------------------- |
+| :----------: | ----------------------------------------------------------- |
 |     1FN      | Todos los atributos dependen de la clave                    |
 |     2FN      | Todos los atributos dependen de la clave completa           |
 |     3FN      | Todos los atributos no dependen de nada más que de la clave |
+
 ### 2.4. Definiciones generales de forma normal (para claves múltiples) 
 
 En general,  se quiere diseñar esquemas de relación de forma que no presenten dependencias parciales ni transitivas, ya que este tipo de dependencias causa las anomalías de actualización anteriormente descritas. Los pasos de normalización a relaciones 3FN analizados hasta ahora impiden las dependencias parciales y transitivas de la clave primaria. El **procedimiento** de normalización descrito **hasta ahora** es útil para el análisis en situaciones prácticas de una **base de datos dada donde ya se han definido claves primarias**. Sin embargo, estas definiciones no consideran otras claves candidatas de una relación, si las hubiera. A continuación, se presentan las definiciones más generales de 2FN y 3FN que consideran todas las claves candidatas de una relación.

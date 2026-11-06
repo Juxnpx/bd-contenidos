@@ -41,9 +41,10 @@ flowchart TD
 
 > [!exercise]+ Ejercicio de calentamiento
 > ¿Qué datos guardarías sobre la entidad *Persona* en estos mini-mundos?
-> - Un banco (la persona es un *cliente*)
-> - Spotify (la persona es un *usuario oyente*)
-> - Un hospital (la persona es un *paciente*)
+> - Un banco (la persona es un *cliente*): DNI, Pasaporte, nombre, fecha de nacimiento, nivel de ingresos etc
+> - Spotify (la persona es un *usuario oyente*): ID, correo, alias, fecha de nacimiento
+> - Un hospital (la persona es un *paciente*): Historia clinica, grupo sanguineo, alergias...
+
 >
 > Observa cómo el **mismo objeto real** genera **datos distintos** según el mini-mundo.
 
