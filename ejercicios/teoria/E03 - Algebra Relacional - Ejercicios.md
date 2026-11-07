@@ -4,7 +4,7 @@
 ## Ejercicio 1 - Repaso
 
 El siguiente esquema relacional representa información relacionada con vehículos, personas y multas. Resuelve los ejercicios que se proponen a continuación en álgebra relacional.
-Puedes usar la [calculadora de álgebra relacional configurada con esta base de datos](https://dbis-uibk.github.io/relax/calc/gist/08c4d28d448a00511a31f5330a3907d5) 
+Puedes usar la [calculadora de  álgebra relacional configurada con esta base de datos](https://dbis-uibk.github.io/relax/calc/gist/08c4d28d448a00511a31f5330a3907d5) 
 
 $MARCA$(<u>cod_marca</u>,nom_marca)
 $MODELO$(<u>cod_marca, cod_modelo</u>, nom_modelo, potencia)
@@ -27,36 +27,60 @@ FK:
 1.	Datos de los modelos de coche cuya potencia está entre 120 y 200.
 ```
 solución en notación RelaX
+σ potencia between 120 and 200 (Modelo)
 ```
 
 2.	Nombre y apellidos de las personas que viven en el municipio de Cáceres, en una dirección que contiene una I, ordenando alfabéticamente por apellidos y nombre.
 ```
 solución en notación RelaX
+π nombre, apellido1, apellido2 (
+  τ apellido1 asc, apellido2 asc, nombre asc (
+    σ municipio = 'CACERES' and domicilio like '%I%' (Persona)
+  )
+)
 ```
 
 3.	Número de expediente, infractor y fecha de las multas impuestas en el primer semestre del 2023, en la Carretera EX-100, entre el km 10 y el 14.
 ```
 solución en notación RelaX
+π expediente, infractor, fecha (
+  σ (fecha >= '2023-01-01' and fecha <= '2023-06-30') and lugar = 'EX-100' and kilometro between 10 and 14 (Multa)
+)
 ```
 
 4.	Datos de las multas cuyo importe sea mayor de 1000 euros o que correspondan a infracciones en la EX-100, ordenando descendentemente por el importe y, a importes iguales, ascendentemente por el número de expediente.
 ```
 solución en notación RelaX
+τ importe desc, expediente asc  ( σ lugar = 'EX-100' or importe > 1000 (Multa))
+
 ```
 
 5.	Nif de las personas que han cometido infracciones y eran a su vez propietarios de un vehículo de marca AUDI.
 ```
 solución en notación RelaX
+π infractor (
+  Multa ⨝ infractor = propietario (
+    Vehiculo ⨝ σ nom_marca = 'AUDI' (Marca)
+  )
+)
 ```
 
 6.	Obtener el valor medio y máximo del importe de las multas y el número de multas que se han impuesto en el 2022.
 ```
 solución en notación RelaX
+γ avg(importe)->media_importe, max(importe)->max_importe, count(expediente)->num_multas (
+  σ fecha >= '2022-01-01' and fecha <= '2022-12-31' (Multa)
+)
 ```
 
 7.	Códigos de artículos que se han infringido tanto en la EX-100 como en la EX-101 (los que tengan en común) ordenando por código de artículo.
 ```
 solución en notación RelaX
+τ articulo asc (
+  π articulo (σ lugar = 'EX-100' (Multa))
+  ∩
+  π articulo (σ lugar = 'EX-101' (Multa))
+)
 ```
 
 8.	Matriculas de los coches que o bien han intervenido en infracciones o bien el nif de su propietario empieza por 1 y contiene un '39' en la 4ª y 5ª posición.
