@@ -2,8 +2,9 @@
 
 ---
 tags: #database, #summary, #entity-relationship
- origin: Versión condensada de los apuntes del Tema 5 (basados en Elmasri y Navathe, 5ª ed.)
- last-update: 2026-10-24
+ origin: Versión condensada de los apuntes del T05 por Claude Opus 5.5. Refinado y editado por aeprieto
+ last-update: 2026-11-10
+ 
 ---
 
 > [!info] Cómo usar esta guía
@@ -16,7 +17,7 @@ tags: #database, #summary, #entity-relationship
 El Modelo Relacional (Codd) resuelve **cómo almacenar** datos de forma consistente, pero no dice nada sobre **cómo diseñar** una base de datos a partir de la realidad de un negocio. Deja tres problemas abiertos:
 
 1. **Semántica**: una tabla con columnas no dice si representa clientes, pacientes o pedidos.
-2. **Comunicación**: un experto de negocio no puede validar un diseño hecho de tablas normalizadas y claves foráneas.
+2. **Comunicación**: un experto de negocio no puede validar un diseño hecho de tablas normalizadas y claves externas.
 3. **Independencia tecnológica**: el "plano" conceptual de los datos no debería depender de si al final usamos una BD relacional u otra tecnología.
 
 **La solución de Chen (1976)**: el Modelo Entidad-Relación, un modelo de alto nivel para el **diseño conceptual**. No compite con el relacional: es el paso previo.
@@ -69,7 +70,7 @@ El tipo de entidad es la **intensión** (el plano); el conjunto de entidades es 
 
 - **Clave primaria**: atributo con valor **único** para cada entidad. En BigER se marca con `key` y se dibuja subrayado.
 - **Claves candidatas**: todos los atributos que podrían ser clave. Para un `Coche`: `vin` y `matricula`.
-- Elegimos una como **primaria** (en BigER pondremos `key` a continuación y en el diagrama la subrayamos); el resto son **claves alternativas** (en BigER pondremos  `unique` y se dibujan con subrayado discontinuo). Se prefiere una clave simple si es posible.
+- Elegimos una como **primaria** (en BigER pondremos `key` a continuación y en el diagrama la subrayamos); el resto son **claves alternativas** (en BigER pondremos `unique` y se dibujan con subrayado discontinuo). Se prefiere una clave simple si es posible.
 
 ```erdiagram
 entity Coche {
@@ -132,7 +133,7 @@ En BigER ambas se escriben juntas: `Entidad_1[MIN..MAX] -> Entidad_2[MIN..MAX]`,
 
 **En el diagrama Crow's Foot**, cada extremo lleva dos marcas. La más cercana a la entidad indica la **máxima** (barra = 1, pata de gallo = N) y la más alejada, la **mínima** (círculo = 0, barra = 1).
 
-![\|180](../../imgs/BD%20-%20BigER%20Relación%2011%201N.png)  
+![\|180](../../imgs/BD%20-%20BigER%20Relacion%2011%201N.png)  
 
 ### ==🟢3.2 Relaciones recursivas ==🎭
 
@@ -162,7 +163,7 @@ relationship trabaja_en {
 - En **1:N**, se puede mover a la entidad del lado "N".
 - En **1:1**, se puede mover a cualquiera de las dos.
 
-![\|380](../../imgs/BD%20-%20BigER%20Atributo%20de%20Relacion.png)`
+![\|380](../../imgs/BD%20-%20BigER%20Atributo%20de%20Relacion.png)
 
 ---
 
@@ -172,13 +173,13 @@ relationship trabaja_en {
 
 **Regla de oro**: es **entidad** si necesitas almacenar información descriptiva sobre el concepto; si solo necesitas su valor, es **atributo**.
 
-- La `capital` de un `Pais`: si solo quieres su nombre, es un atributo. Si quieres sus habitantes, su extensión, etc., es una entidad `Ciudad` con una relación `es_capital_de`.
-- **Estandarizar con entidades**: si un valor se repite en muchas entidades (el `genero` de una `Pelicula`), conviene una entidad propia. Evita errores de escritura.
+- La `capital` de un `Pais`: si solo quieres su nombre, es un atributo. Si quieres sus habitantes, su extensión, etc., es una entidad `Ciudad` con una relación `es_capital`.
+- **Estandarizar con entidades**: si un valor se repite en muchas entidades (el `genero` de una `Pelicula`), conviene crear una entidad propia `Genero`. Evita errores de escritura.
 
 ### 4.2 El error más común 🚫
 
 > [!danger] Nunca uses la clave de otra entidad como atributo
-> El identificador de una entidad **nunca** aparece  en el modelo Entidad Relación como atributo en otra entidad. La conexión siempre es una **relación**. Guardar el `nif` del profesor como atributo `responsable` en `Asignatura` mezcla el nivel conceptual con el de implementación. Lo correcto es una relación `es_responsable_de` entre `Profesor` y `Asignatura`. Las claves foráneas aparecerán después, en la fase lógica, nunca en la conceptual. Es el fallo **G2**.
+> El identificador de una entidad **nunca** aparece en el modelo Entidad Relación como atributo en otra entidad. La conexión siempre es una **relación**. Guardar el `nif` del profesor como atributo `responsable` en `Asignatura` mezcla el nivel conceptual con el de implementación. Lo correcto es una relación `es_responsable_de` entre `Profesor` y `Asignatura`. Las claves externas aparecerán después, en la fase lógica, nunca en la conceptual. Es el fallo **G1**.
 
 ### 4.3 Otros criterios
 
@@ -223,7 +224,7 @@ weak relationship familiar_de {
 
 En el diagrama, tanto la entidad débil como su relación débil se dibujan con **borde grueso**.
 
-![\|220](../../imgs/BD%20-%20BigER%20Relación%20debil.png)
+![\|220](../../imgs/BD%20-%20BigER%20Relacion%20debil.png)
 
 ### 5.4 Los casos de uso (¡solo estos!)
 
@@ -233,7 +234,7 @@ Un `Curso` tiene varias ediciones, y cada edición tiene sus propios datos (`fec
 ![](../../imgs/BD%20-%20BigER%20Debil%20Curso%20Edicion.png)
 
 **Caso 2 — Relaciones M:N "con historia" (con repetición).**
-Un `Profesor` imparte una `Asignatura` en varios cursos académicos: la misma pareja profesor-asignatura se repite, así que el atributo `curso_academico` de la relación sería multivalor. **Solución**: "reificar" la relación en una **entidad débil histórica** (`Docencia`, con clave parcial `curso_academico`).
+Un `Profesor` imparte una `Asignatura` en varios cursos académicos: la misma pareja profesor-asignatura se repite, así que el atributo `curso` de la relación sería multivalor. **Solución**: "reificar" la relación en una **entidad débil histórica** (`Docencia`, con clave parcial `curso`).
 
 ![](../../imgs/BD%20-%20BigER%20Debil%20Docencia.png)
 
@@ -343,7 +344,6 @@ Contraejemplo `imparte` (profesor, asignatura, aula):
 El hecho es **divisible**, así que no es ternaria. La solución: la entidad asociativa `Encargo_Docente`, relacionada con `Aula`. Son tres relaciones binarias: dos asociativas y una normal.
 
 ```erdiagram
-
 entity Profesor {
 nif key
 nombre
@@ -408,7 +408,7 @@ Dentro de una entidad general (la superclase `Empleado`) hay subgrupos con carac
 Una subclase hereda automáticamente **todos los atributos** de su superclase, incluida la clave, y **todas sus relaciones**: si `Empleado` `trabaja_para` un departamento, `Ingeniero` también.
 
 > [!important] ¿Cuándo crear una subclase? SOLO si aporta algo propio
-> Una subclase se justifica únicamente si tiene **atributos específicos** (`tipo_ingeniero` solo para `Ingeniero`) o **participa en relaciones específicas** (`afiliado_a` con `Sindicato` solo para `Empleado_Tiempo_Parcial`). Una subclase "vacía" solo añade complejidad: esa distinción cabe en un atributo de la superclase (fallo **L17**).
+> Una subclase se justifica únicamente si tiene **atributos específicos** (`tipo_ingeniero` solo para `Ingeniero`) o **participa en relaciones específicas** (`afiliado_a` con `Sindicato` solo para `Tiempo_Parcial`). Una subclase "vacía" solo añade complejidad: esa distinción cabe en un atributo de la superclase (fallo **L17**).
 
 ### 7.3 Restricciones de la jerarquía
 
@@ -430,12 +430,12 @@ La jerarquía es un **elemento propio del modelo, con nombre**. Se declara una v
 ```erdiagram
 hierarchy por_jornada Empleado total disjoint
 
-entity Empleado_Tiempo_Completo extends por_jornada {
+entity Tiempo_Completo extends por_jornada {
     dni key
     salario
 }
 
-entity Empleado_Tiempo_Parcial extends por_jornada {
+entity Tiempo_Parcial extends por_jornada {
     dni key
     horas_semanales
 }
@@ -466,12 +466,12 @@ En el diagrama, cada subclase apunta con una flecha a una caja con las restricci
 - **Especialización (Top-Down 🔽)**: partimos de la superclase y detectamos subgrupos. De `Empleado` derivamos `Administrativo`, `Tecnico` e `Ingeniero` por el tipo de puesto.
 - **Generalización (Bottom-Up 🔼)**: partimos de entidades separadas (`Coche`, `Camion`), vemos atributos comunes (`matricula`, `precio`) y creamos la superclase `Vehiculo`; las originales quedan como subclases con solo sus atributos específicos.
 
-En la práctica se combinan ambos. Además, la pertenencia a una subclase puede estar **definida por atributo** (automática: `tipo_trabajo = 'Ingeniero'` implica la subclase `Ingeniero`) o **definida por el usuario** (manual: quién es `Gerente` lo decide el usuario).
+En la práctica se combinan ambos. Además, la pertenencia a una subclase puede estar **definida por atributo** (automática: `puesto = 'Ingeniero'` implica la subclase `Ingeniero`) o **definida por el usuario** (manual: quién es `Gerente` lo decide el usuario).
 
 ### 7.6 Jerarquías y redes
 
 - **Jerarquía (árbol 🌳)**: cada subclase tiene **una única** superclase directa (herencia simple).
-- **Red o entramado (malla 🕸️)**: una subclase puede tener **varias** superclases (herencia múltiple; la subclase se llama *compartida*, como un `Ingeniero_Jefe` que hereda de `Ingeniero`, `Gerente` y `Empleado_Tiempo_Completo`). El EER lo permite, pero BigER no lo soporta. **En esta asignatura SOLO trabajaremos con jerarquías.**
+- **Red o entramado (malla 🕸️)**: una subclase puede tener **varias** superclases (herencia múltiple; la subclase se llama *compartida*, como un `Ingeniero_Jefe` que hereda de `Ingeniero`, `Gerente` y `Tiempo_Completo`). El EER lo permite, pero BigER no lo soporta. **En esta asignatura SOLO trabajaremos con jerarquías.**
 
 ![](../../imgs/BD%20-%20BigER%20Jerarquia%20Universidad.png)
 
@@ -481,17 +481,16 @@ En la práctica se combinan ambos. Además, la pertenencia a una subclase puede 
 
 Cada fallo resta puntos según su gravedad. Conocerlos es la mejor forma de saber qué revisar en tu diagrama.
 
-### Fallos graves (G) 🚨 — 6 puntos por fallo
+### Fallos graves (G) 🚨 — 4 puntos por fallo
 
-| Código | Fallo |
-|---|---|
-| **G1** | El diseño global está muy lejos de la solución correcta |
-| **G2** | Incluir un atributo para representar lo que en realidad es una relación con otra entidad (la clave de otra entidad como atributo) |
-| **G3** | Definir una jerarquía donde el subtipo no "ES UN" tipo del supertipo |
-| **G4** | Usar una relación normal (por ejemplo, llamada `es`) cuando lo correcto es una jerarquía |
-| **G5** | Crear un subtipo que a la vez es entidad débil de otra entidad distinta |
+| Código | Fallo                                                                                                                             |
+| ------ | --------------------------------------------------------------------------------------------------------------------------------- |
+| **G1** | Incluir un atributo para representar lo que en realidad es una relación con otra entidad (la clave de otra entidad como atributo) |
+| **G2** | Definir una jerarquía donde el subtipo no "ES UN" tipo del supertipo                                                              |
+| **G3** | Usar una relación normal (por ejemplo, llamada `es`) cuando lo correcto es una jerarquía                                          |
+| **G4** | Crear un subtipo que a la vez es entidad débil de otra entidad distinta                                                           |
 
-### Fallos medios (M) ⚠️ — 2 puntos por fallo
+### Fallos medios (M) ⚠️ — 1,5 puntos por fallo
 
 | Código | Fallo                                                                                   |
 | ------ | --------------------------------------------------------------------------------------- |
@@ -505,7 +504,7 @@ Cada fallo resta puntos según su gravedad. Conocerlos es la mejor forma de sabe
 | **M8** | Claves primarias distintas en entidades de la misma jerarquía                           |
 | **M9** | Repetir en los subtipos atributos comunes (no clave) del supertipo                      |
 
-### Fallos leves (L) — 1 punto por fallo
+### Fallos leves (L) — 0,75 puntos por fallo
 
 | Tema | Códigos |
 |---|---|
@@ -544,16 +543,16 @@ Cada fallo resta puntos según su gravedad. Conocerlos es la mejor forma de sabe
 
 ### Errores capitales a evitar 🚫
 
-| Error | Corrección |
+| Error                                                          | Corrección |
 |---|---|
-| Clave de otra entidad como atributo (**G2**) | Siempre una relación |
-| Atributo multivalor en el diagrama final | Convertirlo en entidad débil |
-| Ternaria para hechos descomponibles ("falso ternario") | Relaciones binarias, con una asociativa si hace falta |
+| Clave de otra entidad como atributo (**G1**)                   | Siempre una relación |
+| Atributo multivalor en el diagrama final                       | Convertirlo en entidad débil |
+| Ternaria para hechos descomponibles ("falso ternario")         | Relaciones binarias, con una asociativa si hace falta |
 | Añadir tiempo a la clave de una M:N que no se repite (**L13**) | Relación M:N, o asociativa si participa en otras relaciones |
-| `extends` apuntando a la superclase | `extends` apunta a la jerarquía |
-| Subclases sin atributos ni relaciones propias (**L17**) | Un simple atributo en la superclase |
-| Una "super entidad" que lo modela todo | Descomponer el minimundo |
-| Nombres crípticos | Nombres autoexplicativos |
+| `extends` apuntando a la superclase                            | `extends` apunta a la jerarquía |
+| Subclases sin atributos ni relaciones propias (**L17**)        | Un simple atributo en la superclase |
+| Una "super entidad" que lo modela todo                         | Descomponer el minimundo |
+| Nombres crípticos                                              | Nombres autoexplicativos |
 
 ---
 
