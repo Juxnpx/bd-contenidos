@@ -394,11 +394,13 @@ El EER incluye **todo el ER básico** y lo amplía con conceptos de la orientaci
 
 ### 7.1 Subclases y superclases: la relación "ES UN" (IS-A)
 
+==No confundir la jerarquia con una relacion binaria, si decimos que una entidad es un ... de otra, normalmente es una jerarquia==
+
 Dentro de una entidad general (la superclase `Empleado`) hay subgrupos con características particulares (las subclases `Ingeniero`, `Administrativo`, `Gerente`...).
 
 **Principios fundamentales**:
-1. **Misma entidad, rol específico**: un ingeniero concreto es la **misma instancia** que ese empleado.
-2. **Existencia dependiente**: nadie puede estar solo en la subclase; debe estar también en la superclase.
+1. **Misma entidad, rol específico**: un ingeniero concreto es la **misma instancia** que ese empleado. No eres ingeniero si no eres empleado
+2. **Existencia dependiente**: nadie puede estar solo en la subclase; debe estar también en la superclase. 
 3. **Pertenencia opcional (por defecto)**: una instancia puede estar en ninguna, una o varias subclases, según las restricciones que definamos.
 
 ### 7.2 Herencia 🧬 y el criterio fundamental de diseño 💡
